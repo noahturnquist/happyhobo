@@ -38,10 +38,27 @@ def update_terms(terms, terms2 = []):
     new_terms.append("*****s")
     return new_terms
 
+#Censor the words before and after a term
+def censor_neighbors(cond = False, email = ""):
+    email_splt = []
+    email_rmv_enter = []
+    email_clean = []
+    if cond == True:
+        email_splt.append(email.split(" "))
+        for email in email_splt:
+            for word in email:
+                email_rmv_enter.append(word.replace("\n", " "))
+        for word in email_rmv_enter:
+            email_clean.append(word.split("  "))
+    print (email_rmv_enter)
+    print (email_clean)
+
+censor_neighbors(True, email_four)
+
 #print (email_two)
 
 #Censor a list of terms or multiple lists of terms
-def censor_terms(email, terms, terms2 = []):
+def censor_terms(email, terms, terms2 = [], neighbors = False):
     updated_terms = update_terms(terms, terms2)
     itr = 0
     email_lst = [email]
@@ -50,11 +67,16 @@ def censor_terms(email, terms, terms2 = []):
         temp_email = email_lst[itr]
         email_lst.append(temp_email.replace(updated_terms[term], "*****"))
         itr += 1
+    censor_neighbors(True, email[itr])
     return email_lst[itr]
 
 #print (censor_terms(email_two, proprietary_terms))
 
-print (email_three)
+#print (email_three)
 
 #Censor proprietary terms and negative words from email three
-print (censor_terms(email_three, proprietary_terms, negative_words))
+#print (censor_terms(email_three, proprietary_terms, negative_words))
+
+print (email_four)
+
+print (censor_terms(email_four, proprietary_terms, negative_words, True))
