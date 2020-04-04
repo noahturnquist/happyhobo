@@ -15,16 +15,22 @@ def censor_phrase(email, phrase):
     censored_email = email.replace(phrase, "*****")
     return censored_email
 
-#print (censor_phrase(email_one, "learning algorithms"))
-
 #Properietary Terms
-#Censor these terms from Email Two
 proprietary_terms = ["she", "personality matrix", "sense of self", "self-preservation", "learning algorithm", "her", "herself"]
 
+#Negative Words - Censor from email three
+negative_words = ["concerned", "behind", "danger", "dangerous", "alarming", "alarmed", "out of control", "help", "unhappy", "bad", "upset", "awful", "broken", "damage", "damaging", "dismal", "distressed", "distressed", "concerning", "horrible", "horribly", "questionable"]
+
+
 #Update a list of terms to include checks for case sensitivity and plurals
-def update_terms(terms):
+def update_terms(terms, terms2 = []):
     new_terms = []
     for term in terms:
+        new_terms.append(term)
+        new_terms.append(term.upper())
+        new_terms.append(term.title())
+        new_terms.append(term.lower())
+    for term in terms2:
         new_terms.append(term)
         new_terms.append(term.upper())
         new_terms.append(term.title())
@@ -32,20 +38,23 @@ def update_terms(terms):
     new_terms.append("*****s")
     return new_terms
 
-print (email_two)
+#print (email_two)
 
-#Censor a list of terms
-def censor_terms2(email, terms):
-    updated_terms = update_terms(terms)
-    #print (updated_terms)
+#Censor a list of terms or multiple lists of terms
+def censor_terms(email, terms, terms2 = []):
+    updated_terms = update_terms(terms, terms2)
     itr = 0
     email_lst = [email]
+    print (updated_terms)
     for term in range(len(updated_terms)):
         temp_email = email_lst[itr]
         email_lst.append(temp_email.replace(updated_terms[term], "*****"))
-        #print (temp_email, itr)
-        #email_lst.append(email.replace(terms[term], "*****"))
         itr += 1
     return email_lst[itr]
 
-print (censor_terms2(email_two, proprietary_terms))
+#print (censor_terms(email_two, proprietary_terms))
+
+print (email_three)
+
+#Censor proprietary terms and negative words from email three
+print (censor_terms(email_three, proprietary_terms, negative_words))
