@@ -17,25 +17,35 @@ def censor_phrase(email, phrase):
 
 #print (censor_phrase(email_one, "learning algorithms"))
 
+#Properietary Terms
 #Censor these terms from Email Two
 proprietary_terms = ["she", "personality matrix", "sense of self", "self-preservation", "learning algorithm", "her", "herself"]
 
+#Update a list of terms to include checks for case sensitivity and plurals
+def update_terms(terms):
+    new_terms = []
+    for term in terms:
+        new_terms.append(term)
+        new_terms.append(term.upper())
+        new_terms.append(term.title())
+        new_terms.append(term.lower())
+    new_terms.append("*****s")
+    return new_terms
+
 print (email_two)
 
-#Censor a LIST of words or phrases
-def censor_terms(email, terms):
-    email_lst = []
-    email_lst.append(email.split())
-    for email in email_lst:
-        email_temp = []
-        for words in email:
-            email_temp.append(words)
-        for word in range(len(email_temp)):
-            print (email_temp[word])
-            for term in range(len(terms)):
-                if email_temp[word] == terms[term]:
-                    print ("*****")
-        print ("B", email_temp)     
-    return email_lst
+#Censor a list of terms
+def censor_terms2(email, terms):
+    updated_terms = update_terms(terms)
+    #print (updated_terms)
+    itr = 0
+    email_lst = [email]
+    for term in range(len(updated_terms)):
+        temp_email = email_lst[itr]
+        email_lst.append(temp_email.replace(updated_terms[term], "*****"))
+        #print (temp_email, itr)
+        #email_lst.append(email.replace(terms[term], "*****"))
+        itr += 1
+    return email_lst[itr]
 
-print (censor_terms(email_two, proprietary_terms))
+print (censor_terms2(email_two, proprietary_terms))
