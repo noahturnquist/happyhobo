@@ -21,7 +21,6 @@ proprietary_terms = ["she", "personality matrix", "sense of self", "self-preserv
 #Negative Words - Censor from email three
 negative_words = ["concerned", "behind", "danger", "dangerous", "alarming", "alarmed", "out of control", "help", "unhappy", "bad", "upset", "awful", "broken", "damage", "damaging", "dismal", "distressed", "distressed", "concerning", "horrible", "horribly", "questionable"]
 
-
 #Update a list of terms to include checks for case sensitivity and plurals
 def update_terms(terms, terms2 = []):
     new_terms = []
@@ -39,21 +38,39 @@ def update_terms(terms, terms2 = []):
     return new_terms
 
 #Censor the words before and after a term
-def censor_neighbors(cond = False, email = ""):
+def censor_neighbors(email = ""):
+    the_email_lst = [email]
+    the_email = []
     email_splt = []
+    email_rmv = []
     email_rmv_enter = []
+    email_clean_rough = []
     email_clean = []
-    if cond == True:
-        email_splt.append(email.split(" "))
-        for email in email_splt:
-            for word in email:
-                email_rmv_enter.append(word.replace("\n", " "))
-        for word in email_rmv_enter:
-            email_clean.append(word.split("  "))
-    print (email_rmv_enter)
-    print (email_clean)
+    search_index = []
+    neighbor_terms = []
+    for email in the_email_lst:
+        the_email.append(email)
+    for email in the_email:
+        email_rmv.append(email.replace("\n\n"," "))
+    for email in email_rmv:
+        email_rmv_enter.append(email.replace("\n", " "))
+    for email in email_rmv_enter:
+        email_clean_rough.append(email.split(" "))
+    for email in email_clean_rough:
+        for em in email:
+            email_clean.append(em)
+    for word in range(len(email_clean)):
+        if email[word] == "*****":
+           search_index.append(word)
+    for index in search_index:
+        neighbor_terms.append(email_clean[index - 1])
+        neighbor_terms.append(email_clean[index + 1])
+    print ("Search index:", search_index)
+    print ("Neighbors", neighbor_terms)
+    return neighbor_terms
 
-censor_neighbors(True, email_four)
+
+#censor_neighbors(True, email_four)
 
 #print (email_two)
 
@@ -67,7 +84,13 @@ def censor_terms(email, terms, terms2 = [], neighbors = False):
         temp_email = email_lst[itr]
         email_lst.append(temp_email.replace(updated_terms[term], "*****"))
         itr += 1
-    censor_neighbors(True, email[itr])
+    if neighbors == True:
+        neighbor_terms = censor_neighbors(email_lst[itr])
+        for term in range(len(neighbor_terms)):
+            temp_email = email_lst[itr]
+            email_lst.append(temp_email.replace(neighbor_terms[term], "*****"))
+            itr += 1
+            print (itr)
     return email_lst[itr]
 
 #print (censor_terms(email_two, proprietary_terms))
